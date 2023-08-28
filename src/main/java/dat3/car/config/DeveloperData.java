@@ -30,6 +30,8 @@ public class DeveloperData implements ApplicationRunner {
         System.out.println("fisk fisk");
 
         List<Car> cars = new ArrayList<>();
+
+        //Following test data is made by ChatGPT
         cars.add(new Car("Toyota", "Camry", 45.0, 10));
         cars.add(new Car("Ford", "Mustang", 60.0, 5));
         cars.add(new Car("Honda", "Civic", 40.0, 15));
@@ -85,6 +87,7 @@ public class DeveloperData implements ApplicationRunner {
 
         List<Member> members = new ArrayList<>();
 
+        //Following test data is made by ChatGPT
         members.add(new Member("john_doe", "pass123", "john@example.com", "John", "Doe", "123 Main St", "New York", "10001"));
         members.add(new Member("jane_smith", "smith456", "jane@example.com", "Jane", "Smith", "456 Elm Ave", "Los Angeles", "90001"));
         members.add(new Member("michael_johnson", "mike789", "michael@example.com", "Michael", "Johnson", "789 Oak Rd", "Chicago", "60601"));
