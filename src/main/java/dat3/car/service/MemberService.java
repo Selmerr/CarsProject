@@ -63,4 +63,10 @@ public class MemberService {
         Member member = memberRepository.findById(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
         return new MemberResponse(member, true);
     }
+
+    public void deleteMember(String username) {
+        Member member = memberRepository.findById(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
+        memberRepository.delete(member);
+
+    }
 }
