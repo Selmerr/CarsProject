@@ -44,8 +44,8 @@ class MemberController {
 
     //Security ????
     @PatchMapping("/ranking/{username}/{value}")
-    ResponseEntity<Boolean> setRankingForUser(@PathVariable String username, @PathVariable int value) {
-        return null;
+    void setRankingForUser(@PathVariable String username, @PathVariable int value) {
+        memberService.editMemberRanking(username, value);
     }
 
     // Security ????
