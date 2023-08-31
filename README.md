@@ -1,7 +1,3 @@
-[![Build and deploy JAR app to Azure Web App - moCars](https://github.com/Selmerr/CarsProject/actions/workflows/master_mocars.yml/badge.svg)](https://github.com/Selmerr/CarsProject/actions/workflows/master_mocars.yml)
-
-
-
 
 The idea with, and reasons for why to use, a ORM-mapper
 
