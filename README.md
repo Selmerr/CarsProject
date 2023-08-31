@@ -1,3 +1,8 @@
+[![Build and deploy JAR app to Azure Web App - moCars](https://github.com/Selmerr/CarsProject/actions/workflows/master_mocars.yml/badge.svg)](https://github.com/Selmerr/CarsProject/actions/workflows/master_mocars.yml)
+
+
+
+
 The idea with, and reasons for why to use, a ORM-mapper
 
     It's faster, easier and allows us to still work with an OOP mindset and then map our objects to the database
