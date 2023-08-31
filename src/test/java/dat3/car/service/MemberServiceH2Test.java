@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -49,6 +48,7 @@ class MemberServiceH2Test {
         LocalDateTime time = memberResponses.get(0).getCreated();
         assertNotNull(memberResponses.get(0).getUsername(),"Username was not null");
         assertNull(time,"Created time was null");
+        assertNull(memberResponses.get(0).getRanking());
     }
 
     @Test
@@ -111,8 +111,9 @@ class MemberServiceH2Test {
     void testEditMemberNON_ExistingUsernameThrows() {
         //This should test that a ResponseStatus exception is thrown with status= 404 (NOT_FOUND)
         MemberRequest request = new MemberRequest();
-        assertThrows(ResponseStatusException.class,
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 ()-> memberService.editMember(request,"fisk"));
+        assertEquals(HttpStatus.NOT_FOUND,ex.getStatusCode());
     }
 
     @Test
@@ -120,8 +121,9 @@ class MemberServiceH2Test {
         //Create a MemberRequest from an existing member we can edit
         MemberRequest request = new MemberRequest(m1);
         request.setUsername("user3");
-        assertThrows(ResponseStatusException.class,
-                ()-> memberService.editMember(request,"user3"));
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+                ()-> memberService.editMember(request,"user1"));
+        assertEquals(HttpStatus.BAD_REQUEST,ex.getStatusCode());
     }
 
     @Test
@@ -144,8 +146,9 @@ class MemberServiceH2Test {
 
     @Test
     void testDeleteMember_ThatDontExist() {
-        assertThrows(ResponseStatusException.class,
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 ()-> memberService.deleteMember("user3"),"Member with that id does not exist");
+        assertEquals(HttpStatus.NOT_FOUND,ex.getStatusCode());
     }
 }
 
