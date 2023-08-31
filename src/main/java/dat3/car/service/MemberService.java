@@ -21,7 +21,6 @@ public class MemberService {
     }
 
     public List<MemberResponse> getMembers(boolean includeAll) {
-
         List<Member> members = memberRepository.findAll();
         //List<MemberResponse> response = new ArrayList<>();
 
@@ -59,25 +58,21 @@ public class MemberService {
         return ResponseEntity.ok(true);
     }
 
-
     public MemberResponse findById(String username) {
-        Member member = memberRepository.findById(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
+        Member member = getMemberByUsername(username);
         return new MemberResponse(member, true);
     }
 
     public void deleteMember(String username) {
-        Member member = memberRepository.findById(username).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
+        Member member = getMemberByUsername(username);
         memberRepository.delete(member);
-
     }
-
 
     public void editMemberRanking(String username, int value) {
         Member member = getMemberByUsername(username);
         member.setRanking(value);
         memberRepository.save(member);
     }
-
 
     private Member getMemberByUsername(String username){
         return memberRepository.findById(username).

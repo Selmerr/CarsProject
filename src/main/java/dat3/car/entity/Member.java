@@ -30,13 +30,13 @@ public class Member extends AdminDetails {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(length = 60)
     private String street;
 
-    @Column(nullable = false, length = 60)
+    @Column(length = 60)
     private String city;
 
-    @Column(nullable = false, length = 60)
+    @Column(length = 60)
     private String zip;
 
     private boolean approved;
