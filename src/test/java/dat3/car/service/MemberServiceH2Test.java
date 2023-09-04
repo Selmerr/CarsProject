@@ -23,7 +23,7 @@ class MemberServiceH2Test {
     MemberRepository memberRepository;
     MemberService memberService;
 
-    Member m1, m2;  //Talk about references in Java for why we don't add the "isInitialize flag"
+    Member m1, m2;
 
     @BeforeEach
     void setUp() {

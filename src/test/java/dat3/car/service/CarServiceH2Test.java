@@ -20,7 +20,7 @@ import java.util.List;
 @DataJpaTest
 //DirtiesContext provided to me by chatGPT,
 // after I explained it looked like H2 kept track of the auto-incremented value for the id
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CarServiceH2Test {
 
     @Autowired
@@ -28,11 +28,16 @@ class CarServiceH2Test {
     CarService carService;
 
     Car c1, c2;
+
+    boolean isInitialized = false;
     @BeforeEach
     void setUp() {
-        c1 = carRepository.save(new Car("Ford","Mustang",60,10));
-        c2 = carRepository.save(new Car("Nissan","Rogue",53, 15));
+        if(isInitialized) return;
+        c1 = carRepository.saveAndFlush(new Car("Ford","Mustang",60,10));
+        c2 = carRepository.saveAndFlush(new Car("Nissan","Rogue",53, 15));
         carService = new CarService(carRepository);
+
+        isInitialized = true;
     }
 
 
@@ -42,7 +47,7 @@ class CarServiceH2Test {
         assertEquals(2,cars.size());
         assertEquals("Nissan",cars.get(1).getBrand());
         assertEquals(10,cars.get(0).getBestDiscount());
-        assertEquals(1,cars.get(0).getId());
+        assertEquals(c1.getId(),cars.get(0).getId());
 
     }
 
@@ -57,9 +62,9 @@ class CarServiceH2Test {
 
     @Test
     void findByIdFound() {
-        CarResponse cr = carService.findById(1);
+        CarResponse cr = carService.findById(c1.getId());
         assertNotNull(cr,"Car was not null");
-        assertEquals(1,cr.getId());
+        assertEquals(c1.getId(),cr.getId());
         assertEquals("Ford",cr.getBrand());
         assertEquals(10,cr.getBestDiscount());
     }
@@ -79,9 +84,8 @@ class CarServiceH2Test {
                 pricePrDay(500.0).
                 bestDiscount(0).
                 build();
-        carService.addCar(request);
+        CarResponse response = carService.addCar(request);
 
-        CarResponse response = carService.findById(3);
         assertEquals("Kia",response.getBrand());
     }
     //Add another test if I decide to check for cars already in the database
@@ -90,8 +94,8 @@ class CarServiceH2Test {
     void editCarDoesExist() {
         CarRequest request = new CarRequest(c1);
         request.setModel("Fisk");
-        carService.editCar(request,1);
-        CarResponse response = carService.findById(1);
+        carService.editCar(request,c1.getId());
+        CarResponse response = carService.findById(c1.getId());
         assertEquals("Ford",response.getBrand());
         assertEquals("Fisk",response.getModel());
         assertEquals(60,response.getPricePrDay());
@@ -103,7 +107,7 @@ class CarServiceH2Test {
     void editCarDoesNotExist() {
         CarRequest request = new CarRequest();
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
-                ()->carService.editCar(request,3),"Car with this id does not exit");
+                ()->carService.editCar(request,0),"Car with this id does not exit");
         assertEquals(HttpStatus.NOT_FOUND,ex.getStatusCode());
     }
 
@@ -119,14 +123,14 @@ class CarServiceH2Test {
 
     @Test
     void deleteCarById() {
-        carService.deleteCarById(1);
-        assertFalse(carRepository.existsById(1));
+        carService.deleteCarById(c1.getId());
+        assertFalse(carRepository.existsById(c1.getId()));
     }
 
     @Test
     void deleteCarByIdDoesNotExists() {
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
-                ()-> carService.deleteCarById(3),"Car with this id does not exist");
+                ()-> carService.deleteCarById(10000),"Car with this id does not exist");
         assertEquals(HttpStatus.NOT_FOUND,ex.getStatusCode());
     }
 }

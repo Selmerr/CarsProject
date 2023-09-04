@@ -6,12 +6,13 @@ import dat3.car.repository.CarRepository;
 import dat3.car.repository.MemberRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@Configuration //Stod Controller før men Configuration er mere rigtigt, åbenbart
 public class DeveloperData implements ApplicationRunner {
 
     CarRepository carRepository;
