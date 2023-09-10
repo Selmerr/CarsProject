@@ -24,13 +24,25 @@ public class CarService {
     public List<CarResponse> getCars(boolean includeAll) {
 
         List<Car> cars = carRepository.findAll();
-        List<CarResponse> response = new ArrayList<>();
+        List<CarResponse> response = cars.stream().map((car -> new CarResponse(car,includeAll))).toList();
 
-        for (Car car : cars) {
-            CarResponse cr = new CarResponse(car,includeAll);
-            response.add(cr);
-        }
+//        for (Car fisk : cars) {
+//            CarResponse cr = new CarResponse(fisk,includeAll);
+//            response.add(cr);
+//        }
 
+        return response;
+    }
+
+    public List<CarResponse> getCarsByBrandAndModel(String brand, String model) {
+        List<Car> cars = carRepository.findByBrandAndModel(brand,model);
+        List<CarResponse> response = cars.stream().map((car -> new CarResponse(car,false))).toList();
+        return response;
+    }
+
+    public List<CarResponse> getCarsWithoutReservations() {
+        List<Car> cars = carRepository.findByReservationsEmpty();
+        List<CarResponse> response = cars.stream().map((car -> new CarResponse(car,false))).toList();
         return response;
     }
 
@@ -60,8 +72,18 @@ public class CarService {
         return ResponseEntity.ok(true);
     }
 
+    public List<CarResponse> getCarsWithHighestDiscount() {
+        List<Car> cars = carRepository.findCarsWithHighestDiscount();
+        List<CarResponse> response = cars.stream().map((car -> new CarResponse(car,true))).toList();
+        return response;
+    }
+
     public void deleteCarById(int id) {
         Car car = carRepository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with this id does not exist"));
         carRepository.delete(car);
+    }
+
+    public Double getAvgPricePrDay() {
+    return null;
     }
 }

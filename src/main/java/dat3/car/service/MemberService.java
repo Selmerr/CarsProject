@@ -60,7 +60,7 @@ public class MemberService {
 
     public MemberResponse findById(String username) {
         Member member = getMemberByUsername(username);
-        return new MemberResponse(member, true);
+        return new MemberResponse(member, false);
     }
 
     public void deleteMember(String username) {
@@ -78,4 +78,12 @@ public class MemberService {
         return memberRepository.findById(username).
                 orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Member with this username does not exist"));
     }
+
+    public List<MemberResponse> getMembersWithReservations() {
+        List<Member> members = memberRepository.findMembersByReservationsIsNotNull();
+        List<MemberResponse> response = members.stream().map((member -> new MemberResponse(member,true))).toList();
+        return response;
+    }
+
+
 }

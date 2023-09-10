@@ -2,13 +2,19 @@ package dat3.car.config;
 
 import dat3.car.entity.Car;
 import dat3.car.entity.Member;
+import dat3.car.entity.Reservation;
 import dat3.car.repository.CarRepository;
 import dat3.car.repository.MemberRepository;
+import dat3.car.repository.ReservationRepository;
+import dat3.security.entity.Role;
+import dat3.security.entity.UserWithRoles;
+import dat3.security.repository.UserWithRolesRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +22,13 @@ import java.util.List;
 public class DeveloperData implements ApplicationRunner {
 
     CarRepository carRepository;
-
     MemberRepository memberRepository;
+    ReservationRepository reservationRepository;
 
-    public DeveloperData (CarRepository carRepository, MemberRepository memberRepository) {
+    public DeveloperData (CarRepository carRepository, MemberRepository memberRepository, ReservationRepository reservationRepository) {
         this.carRepository = carRepository;
         this.memberRepository = memberRepository;
+        this.reservationRepository = reservationRepository;
 
 
     }
@@ -48,7 +55,7 @@ public class DeveloperData implements ApplicationRunner {
         cars.add(new Car("Mazda", "CX-5", 50.0, 10));
         cars.add(new Car("Kia", "Soul", 35.0, 25));
         cars.add(new Car("Hyundai", "Tucson", 55.0, 8));
-        cars.add(new Car("Chrysler", "300", 58.0, 7));
+        cars.add(new Car("Chrysler", "300", 58.0, 25));
         cars.add(new Car("Jeep", "Wrangler", 70.0, 5));
         cars.add(new Car("GMC", "Sierra", 65.0, 10));
         cars.add(new Car("Ram", "1500", 62.0, 12));
@@ -101,7 +108,26 @@ public class DeveloperData implements ApplicationRunner {
         members.add(new Member("amanda_anderson", "amanda456", "amanda@example.com", "Amanda", "Anderson", "789 Oak St", "San Francisco", "94101"));
 
         memberRepository.saveAll(members);
+
+        Car car1 = cars.get(0);
+        Member m1 = members.get(0);
+
+        reservationRepository.save(new Reservation(LocalDate.now(),cars.get(0),members.get(0)));
+        reservationRepository.save(new Reservation(LocalDate.now().plusDays(2),cars.get(0),members.get(5)));
+
+
     }
+
+    @Autowired
+    UserWithRolesRepository userWithRolesRepository;
+
+    final String passwordUsedByAll = "test12";
+
+    /*****************************************************************************************
+     NEVER  COMMIT/PUSH CODE WITH DEFAULT CREDENTIALS FOR REAL
+     iT'S ONE OF THE TOP SECURITY FLAWS YOU CAN DO
+     *****************************************************************************************/
+
 
 
 

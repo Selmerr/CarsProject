@@ -6,6 +6,7 @@ import dat3.car.entity.Member;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +32,8 @@ public class MemberResponse {
         Integer ranking;
         Boolean approved;
 
+        List<ReservationResponse> reservations;
+
         //Convert Member Entity to Member DTO
         public MemberResponse (Member m, boolean includeAll) {
             this.username = m.getUsername();
@@ -46,5 +49,6 @@ public class MemberResponse {
                 this.approved = m.isApproved();
                 this.ranking = m.getRanking();
             }
+            this.reservations = m.getReservations().stream().map(ReservationResponse::new).toList();
         }
     }

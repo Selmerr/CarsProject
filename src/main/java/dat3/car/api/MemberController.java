@@ -21,9 +21,12 @@ class MemberController {
     //Security Admin Only
     @GetMapping
     List<MemberResponse> getMembers(){
-        return memberService.getMembers(false);
+        return memberService.getMembers(true);
     }
-
+    @GetMapping("/reservations")
+    List <MemberResponse> getMembersWithReservations() {
+        return memberService.getMembersWithReservations();
+    }
     //Security Admin Only
     @GetMapping(path = "/{username}")
     MemberResponse getMemberById(@PathVariable String username) throws Exception {
@@ -53,6 +56,8 @@ class MemberController {
     void deleteMemberByUsername(@PathVariable String username) {
         memberService.deleteMember(username);
     }
+
+
 
 
 

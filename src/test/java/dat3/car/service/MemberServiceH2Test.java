@@ -20,16 +20,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceH2Test {
 
     @Autowired
-    MemberRepository memberRepository;
+    public MemberRepository memberRepository;
     MemberService memberService;
 
     Member m1, m2;
 
+    boolean isInitialized = false;
+
     @BeforeEach
     void setUp() {
-        m1 = memberRepository.save(new Member("user1", "pw1", "email1", "fn1", "ln1",  "street1", "city1", "zip1"));
-        m2 = memberRepository.save(new Member("user2", "pw2", "email2", "fn2", "ln2", "street2", "city2", "zip2"));
-        memberService = new MemberService(memberRepository); //Set up memberService with the mock (H2) database
+        if(!isInitialized) {
+
+            m1 = memberRepository.saveAndFlush(new Member("user1", "pw1", "email1", "fn1", "ln1", "street1", "city1", "zip1"));
+            m2 = memberRepository.saveAndFlush(new Member("user2", "pw2", "email2", "fn2", "ln2", "street2", "city2", "zip2"));
+            memberService = new MemberService(memberRepository);
+        }//Set up memberService with the mock (H2) database
+        isInitialized = true;
     }
 
     @Test

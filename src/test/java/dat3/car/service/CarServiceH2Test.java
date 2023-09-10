@@ -18,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 @DataJpaTest
-//DirtiesContext provided to me by chatGPT,
-// after I explained it looked like H2 kept track of the auto-incremented value for the id
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CarServiceH2Test {
 
@@ -33,8 +31,8 @@ class CarServiceH2Test {
     @BeforeEach
     void setUp() {
         if(isInitialized) return;
-        c1 = carRepository.saveAndFlush(new Car("Ford","Mustang",60,10));
-        c2 = carRepository.saveAndFlush(new Car("Nissan","Rogue",53, 15));
+        c1 = carRepository.save(new Car("Ford","Mustang",60,10));
+        c2 = carRepository.save(new Car("Nissan","Rogue",53, 15));
         carService = new CarService(carRepository);
 
         isInitialized = true;
@@ -116,7 +114,7 @@ class CarServiceH2Test {
         CarRequest request = new CarRequest(c1);
         request.setId(3);
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
-                ()->carService.editCar(request,1),"Can't edit id");
+                ()->carService.editCar(request,c1.getId()),"Can't edit id");
         assertEquals(HttpStatus.BAD_REQUEST,ex.getStatusCode());
 
     }

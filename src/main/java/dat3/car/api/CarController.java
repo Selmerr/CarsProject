@@ -3,6 +3,7 @@ package dat3.car.api;
 
 import dat3.car.dto.CarRequest;
 import dat3.car.dto.CarResponse;
+import dat3.car.entity.Car;
 import dat3.car.service.CarService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,21 @@ public class CarController {
     @GetMapping("/{id}")
     CarResponse getCarById(@PathVariable int id) throws Exception {
         return carService.findById(id);
+    }
+    @GetMapping("/No")
+    List<CarResponse> getCarsWithoutReservations() {
+        return carService.getCarsWithoutReservations();
+    }
+
+    @GetMapping("/discount")
+    List<CarResponse> getCarsWithHighestDiscount() {
+        return carService.getCarsWithHighestDiscount();
+    }
+
+
+    @GetMapping("/{brand}/{model}")
+        List<CarResponse> getCarsByBrandAndModel(@PathVariable String brand, @PathVariable String model) throws Exception {
+        return carService.getCarsByBrandAndModel(brand,model);
     }
 
     @PostMapping()

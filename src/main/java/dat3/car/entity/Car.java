@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -27,7 +30,15 @@ public class Car extends AdminDetails{
     @Column(name = "max_discount")
     int bestDiscount;
 
+    @OneToMany(mappedBy = "car")
+    List<Reservation> reservations;
 
+    public void addReservation(Reservation reservation) {
+        if(reservations==null) {
+            reservations = new ArrayList<>();
+        }
+        reservations.add(reservation);
+    }
 
     public Car (String brand, String model, double pricePrDay, int bestDiscount) {
         this.brand=brand;
