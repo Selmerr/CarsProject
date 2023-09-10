@@ -13,6 +13,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> findByBrandAndModel(String brand, String model);
     List<Car> findByReservationsEmpty();
 
+    //Query i got from ChatGPT
     @Query("SELECT c FROM Car c WHERE c.bestDiscount = (SELECT MAX(c2.bestDiscount) FROM Car c2)")
     List<Car> findCarsWithHighestDiscount();
 
