@@ -41,7 +41,7 @@ public class CarService {
     }
 
     public List<CarResponse> getCarsWithoutReservations() {
-        List<Car> cars = carRepository.findByReservationsEmpty();
+        List<Car> cars = carRepository.findCarsByReservationsIsNull();
         List<CarResponse> response = cars.stream().map((car -> new CarResponse(car,false))).toList();
         return response;
     }

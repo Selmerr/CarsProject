@@ -111,7 +111,6 @@ public class DeveloperData implements ApplicationRunner {
 
         Car car1 = cars.get(0);
         Member m1 = members.get(0);
-
         reservationRepository.save(new Reservation(LocalDate.now(),cars.get(0),members.get(0)));
         reservationRepository.save(new Reservation(LocalDate.now().plusDays(2),cars.get(0),members.get(5)));
 

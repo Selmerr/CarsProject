@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/members")
 class MemberController {
 
@@ -23,16 +24,16 @@ class MemberController {
     List<MemberResponse> getMembers(){
         return memberService.getMembers(true);
     }
-    @GetMapping("/reservations")
-    List <MemberResponse> getMembersWithReservations() {
-        return memberService.getMembersWithReservations();
-    }
+
     //Security Admin Only
     @GetMapping(path = "/{username}")
     MemberResponse getMemberById(@PathVariable String username) throws Exception {
         return memberService.findById(username);
     }
-
+    @GetMapping("/reservations")
+    List <MemberResponse> getMembersWithReservations() {
+        return memberService.getMembersWithReservations();
+    }
     //Security --> Anonymous
     @PostMapping()
     MemberResponse addMember(@RequestBody MemberRequest body){
